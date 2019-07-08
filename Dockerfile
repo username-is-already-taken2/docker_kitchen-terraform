@@ -4,6 +4,7 @@ ENTRYPOINT ["/bin/sh"]
 ARG TF_VERSION=0.12.3
 WORKDIR /tmp
 ADD Gemfile .
+ENV CHEF_LICENSE="accept"
 RUN apt-get update && apt-get install -y unzip \
   git build-essential && apt-get clean && \
   chef exec bundle install && \
