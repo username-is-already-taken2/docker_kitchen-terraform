@@ -1,14 +1,20 @@
-FROM chef/chefdk:latest
+FROM hashicorp/terraform:latest
 
-ENTRYPOINT ["/bin/sh"]
-ARG TF_VERSION=0.12.18
+MAINTAINER digitalGaz <digitalgaz@hotmail.com>
+
+ENV BUILD_PACKAGES bash curl-dev ruby-dev build-base
+
+ENV RUBY_PACKAGES ruby ruby-io-console ruby-bundler
+
 WORKDIR /tmp
+
 ADD Gemfile .
-ENV CHEF_LICENSE="accept"
-RUN apt-get update && apt-get install -y unzip \
-  git build-essential && apt-get clean && \
-  chef exec bundle install && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && unzip terraform_${TF_VERSION}_linux_amd64.zip -d /usr/bin/ && rm terraform_*.zip
+
+RUN apk update && \
+    apk upgrade && \
+    apk add $BUILD_PACKAGES && \
+    apk add $RUBY_PACKAGES && \
+    bundle install && \
+    rm -rf /var/cache/apk/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENTRYPOINT ["/bin/bash"]
