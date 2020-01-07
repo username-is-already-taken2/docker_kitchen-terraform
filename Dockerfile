@@ -1,7 +1,7 @@
 FROM chef/chefdk:latest
 
 ENTRYPOINT ["/bin/sh"]
-ARG TF_VERSION=0.12.3
+ARG TF_VERSION=0.12.18
 WORKDIR /tmp
 ADD Gemfile .
 ENV CHEF_LICENSE="accept"
